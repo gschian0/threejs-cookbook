@@ -4,6 +4,7 @@
     <title>02.06 - Create terrain from heightmap</title>
     <script src="../libs/three.js"></script>
     <script src="../libs/dat.gui.min.js"></script>
+    <script src="../libs/dat.gui.min.js"></script>
     <script src="../libs/chroma.min.js"></script>
     <style>
         body {
@@ -67,9 +68,9 @@
         var depth = 512;
         var width = 512;
 
-        var spacingX = 3;
-        var spacingZ = 3;
-        var heightOffset = 2;
+        var spacingX = 1;
+        var spacingZ = 1;
+        var heightOffset = 10;
 
         var canvas = document.createElement('canvas');
         canvas.width = 512;
@@ -77,7 +78,7 @@
         var ctx = canvas.getContext('2d');
 
         var img = new Image();
-        img.src = "../assets/other/grandcanyon.png";
+        img.src = "SimpleFoam.png";
         img.onload = function () {
             // draw on canvas
             ctx.drawImage(img, 0, 0);
@@ -127,15 +128,16 @@
             var zMax = geom.boundingBox.max.z;
             var xMax = geom.boundingBox.max.x;
 
-            var mesh = new THREE.Mesh(geom, new THREE.MeshLambertMaterial({
-                vertexColors: THREE.FaceColors,
+            var mesh = new THREE.PointCloud(geom, new THREE.PointCloudMaterial({
+                //vertexColors: THREE.FaceColors,
                 color: 0x666666,
-                shading: THREE.NoShading
+                //shading: THREE.NoShading
             }));
             mesh.translateX(-xMax / 2);
             mesh.translateZ(-zMax / 2);
             scene.add(mesh);
             mesh.name = 'valley';
+            mesh.rotation.x = Math.PI/2;
         };
 
     }

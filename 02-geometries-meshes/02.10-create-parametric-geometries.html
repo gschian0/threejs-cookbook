@@ -79,9 +79,9 @@
         // create parametric and add to scene
         // http://paulbourke.net/geometry/klein/
         var paramFunction4 = function (u, v) {
-            var a = 3;
-            var n = 3;
-            var m = 1;
+            var a = 2;
+            var n = 2;
+            var m = 6;
 
             var u = u * 4 * Math.PI;
             var v = v * 2 * Math.PI;
@@ -105,20 +105,51 @@
             return new THREE.Vector3(x, y, z);
         }
 
+        var paramFunction6 = function (u, v) {
+            var u = u*Math.PI;
+            var v = v*Math.PI;
+           
+            var x = Math.sin(u*3) * 1+ Math.cos(v);
+            var y = Math.sin(u +Math.PI/6) * (1+Math.cos(v+2*Math.PI/9));
+            var z = Math.sin(u+4*Math.PI/6)*(1+Math.cos(v+8*Math.PI/9));
+           
+
+            return new THREE.Vector3(x, y, z);
+        }
+
 
         var directionalLight = new THREE.DirectionalLight();
         directionalLight.position.set(-30, 50, 50);
         scene.add(directionalLight);
-
-        var geom = new THREE.ParametricGeometry(paramFunction5, 100, 100);
-        var mat = new THREE.MeshPhongMaterial({color: 0xcc3333a, side: THREE.DoubleSide, shading: THREE.FlatShading});
+2
+        var directionalLight2 = new THREE.DirectionalLight();
+        directionalLight2.position.set(30, -50, -50);
+        scene.add(directionalLight2);
+        function drawParam(x,y,z,sc){
+        var geom = new THREE.ParametricGeometry(paramFunction6, 100, 100);
+        var mat = new THREE.MeshPhongMaterial({color: 0xcc3333a, side: THREE.DoubleSide, shading: THREE.SmoothShading});
         var mesh = new THREE.Mesh(geom, mat);
         mesh.name = 'param';
-        mesh.scale.set(4, 4, 4);
-
+        mesh.scale.set(sc, sc, sc);
+        mesh.position.copy(new THREE.Vector3(x,y,z));
         scene.add(mesh);
+        if (x > 1 ){
+            //  mesh.scale.set(sc-1,sc-1,sc-1);
+            drawParam(x-1,y-1,z-1,sc-1);
+            
+            drawParam(-x-1,-y-1,-z-1,sc-1);
 
+            // mesh.scale.set(sc-1,sc-1,sc-1);
+            // drawParam(x+1,y+1,z+1,sc-1);
+            
+            // drawParam(-x+1,-y+1,-z+1,sc+1);
 
+            
+        }
+
+        }
+
+        drawParam(10,10,10,10);
         // position and point the camera to the center of the scene
         camera.position.x = -50;
         camera.position.y = 150;
@@ -135,8 +166,8 @@
 
     function render() {
         renderer.render(scene, camera);
-        scene.getObjectByName('param').rotation.x += 0.01;
-        scene.getObjectByName('param').rotation.y += 0.01;
+        //scene.getObjectByName('param').rotation.x += 0.01;
+        //scene.getObjectByName('param').rotation.y += 0.01;
         requestAnimationFrame(render);
         camControls.update();
     }

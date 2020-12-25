@@ -34,7 +34,7 @@
         vOpacity = pOpacity;
 
         vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-        gl_PointSize = 2.0 * pSize * size * ( scale / length( mvPosition.xyz ) );
+        gl_PointSize = 1.0 * pSize * size * ( scale / length( mvPosition.xyz ) );
         gl_Position = projectionMatrix * mvPosition;
     }
 
@@ -51,10 +51,13 @@
     varying float vOpacity;
 
     uniform sampler2D map;
+    vec2 u_resolution;
 
     void main() {
+       // vec2 coord = gl_FragCoord.xy / u_resolution;
         gl_FragColor = vec4( psColor, vOpacity );
         gl_FragColor = gl_FragColor * texture2D( map, vec2( gl_PointCoord.x, 1.0 - gl_PointCoord.y ) );
+        //vec3 vam = vec3(vColor.x*vColor.y,vColor.y,vColor.x*vColor.x);
         gl_FragColor = gl_FragColor * vec4( vColor, 1.0 );
     }
 
